@@ -13,6 +13,8 @@ npx skills add sapiom/skills --skill sapiom
 | Skill | Description |
 |-------|-------------|
 | `sapiom` | SDK setup, service endpoints, and pricing for Sapiom capabilities |
+| `agent-builder` | Build and deploy autonomous agents that run on a schedule |
+| `compute` | Deploy and run code — scheduled jobs, batch execution, sandboxes |
 
 ## Links
 
