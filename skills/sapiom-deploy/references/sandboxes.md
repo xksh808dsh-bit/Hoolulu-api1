@@ -23,7 +23,7 @@ const res = await safeFetch(`${GATEWAY}/v1/sandboxes`, {
   headers: { "Content-Type": "application/json" },
   body: JSON.stringify({
     name: "my-sandbox",
-    tier: "s",           // optional, default "xs"
+    tier: "s",           // optional, default "s"
     ttl: "4h",           // optional, default "4h"
     envs: {              // optional, immutable after creation
       NODE_ENV: "production",
