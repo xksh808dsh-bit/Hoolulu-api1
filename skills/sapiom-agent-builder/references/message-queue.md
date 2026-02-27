@@ -16,6 +16,8 @@ const QSTASH = "https://upstash.services.sapiom.ai";
 
 ## Publish a Message
 
+Fire-and-forget delivery to an HTTP endpoint. Price: $0.00001.
+
 ```js
 const res = await safeFetch(`${QSTASH}/v1/qstash/publish/https://my-webhook.example.com/handler`, {
   method: "POST",
@@ -31,10 +33,11 @@ const data = await res.json();
 console.log(`Message ID: ${data.messageId}`);
 ```
 
-## Enqueue to a Queue
+## Enqueue to a Named Queue
+
+Ordered delivery through a named queue. The queue is created automatically on first use. Price: $0.00001.
 
 ```js
-// Enqueue — ordered delivery with a named queue
 const res = await safeFetch(`${QSTASH}/v1/qstash/enqueue/my-queue/https://my-webhook.example.com/handler`, {
   method: "POST",
   headers: { "Content-Type": "application/json" },
@@ -43,6 +46,8 @@ const res = await safeFetch(`${QSTASH}/v1/qstash/enqueue/my-queue/https://my-web
 ```
 
 ## Batch Publish
+
+Publish multiple messages in one request. Price: $0.00001 × message count.
 
 ```js
 const res = await safeFetch(`${QSTASH}/v1/qstash/batch`, {
@@ -55,21 +60,90 @@ const res = await safeFetch(`${QSTASH}/v1/qstash/batch`, {
 });
 ```
 
-## Useful Headers
+## Useful Delivery Headers
 
 | Header | Example | Description |
 |--------|---------|-------------|
-| `Upstash-Retries` | `"3"` | Number of retry attempts |
+| `Upstash-Retries` | `"3"` | Number of retry attempts on failure |
 | `Upstash-Delay` | `"60s"` | Delay before first delivery |
-| `Upstash-Timeout` | `"30s"` | Delivery timeout |
+| `Upstash-Timeout` | `"30s"` | Delivery timeout per attempt |
 
-## Pricing
+## Schedules
 
-~$0.000010 per message published. Retries are free.
+Create recurring deliveries with a cron expression. Price: $0.00001 to create, $0.001 for management ops.
+
+```js
+// Create a schedule — Upstash-Cron header is required
+const res = await safeFetch(`${QSTASH}/v1/qstash/schedules/https://my-webhook.example.com/handler`, {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+    "Upstash-Cron": "*/5 * * * *",  // every 5 minutes
+  },
+  body: JSON.stringify({ event: "tick" }),
+});
+
+const { scheduleId } = await res.json();
+
+// List schedules
+const list = await safeFetch(`${QSTASH}/v1/qstash/schedules`);
+// [{ scheduleId, cron, destination, ... }, ...]
+
+// Get a schedule
+const schedule = await safeFetch(`${QSTASH}/v1/qstash/schedules/${scheduleId}`);
+
+// Pause / resume
+await safeFetch(`${QSTASH}/v1/qstash/schedules/${scheduleId}/pause`, { method: "PATCH" });
+await safeFetch(`${QSTASH}/v1/qstash/schedules/${scheduleId}/resume`, { method: "PATCH" });
+
+// Delete
+await safeFetch(`${QSTASH}/v1/qstash/schedules/${scheduleId}`, { method: "DELETE" });
+```
+
+## Queue Management
+
+Queues are created lazily when a message is first enqueued. Price: $0.001 per management op.
+
+```js
+// List queues
+const list = await safeFetch(`${QSTASH}/v1/qstash/queues`);
+// [{ name, ... }, ...]
+
+// Get a queue
+const queue = await safeFetch(`${QSTASH}/v1/qstash/queues/my-queue`);
+
+// Pause / resume processing
+await safeFetch(`${QSTASH}/v1/qstash/queues/my-queue/pause`, { method: "POST" });
+await safeFetch(`${QSTASH}/v1/qstash/queues/my-queue/resume`, { method: "POST" });
+
+// Delete a queue
+await safeFetch(`${QSTASH}/v1/qstash/queues/my-queue`, { method: "DELETE" });
+```
+
+## Message Management
+
+Look up or cancel an in-flight message by its ID. Price: $0.001.
+
+```js
+// Get message status
+const msg = await safeFetch(`${QSTASH}/v1/qstash/messages/${messageId}`);
+
+// Cancel (delete) a message before it's delivered
+await safeFetch(`${QSTASH}/v1/qstash/messages/${messageId}`, { method: "DELETE" });
+```
+
+## Pricing Summary
+
+| Operation | Price |
+|-----------|-------|
+| Publish / enqueue / batch (per message) | $0.00001 |
+| Schedule create | $0.00001 |
+| Schedule / queue / message management | $0.001 |
 
 ## Gotchas
 
-- **Destination is in the URL path** — `POST /v1/qstash/publish/{destination-url}`
+- **Destination is in the URL path** — `POST /v1/qstash/publish/{destination-url}` and `POST /v1/qstash/schedules/{destination-url}`
+- **Upstash-Cron is required for schedules** — omitting it returns 400
+- **Queues are created lazily** — no explicit create endpoint; enqueue to a new queue name and it appears automatically
 - **Messages go to HTTP endpoints** — the target must be publicly reachable
-- **Not needed for simple cron** — Blaxel handles cron scheduling directly; use QStash only for webhook fan-out or delayed tasks
-- **Enqueue vs publish** — use `enqueue` for ordered processing via a named queue; use `publish` for fire-and-forget fan-out
+- **Use schedules, not Blaxel cron, for webhook fan-out** — use QStash schedules when the recurring action is delivering to an HTTP endpoint; use Blaxel jobs when the recurring action is running your own code
