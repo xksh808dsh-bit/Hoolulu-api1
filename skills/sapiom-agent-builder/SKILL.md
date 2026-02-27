@@ -68,6 +68,7 @@ Read the reference for each service the agent needs. **Only read what you need.*
 | Web search | `references/web-search.md` | Agent needs to find URLs |
 | Vector storage | `references/vector-storage.md` | Agent needs semantic search / RAG |
 | Text search | `references/text-search.md` | Agent needs keyword search |
+| Redis cache | `references/redis-cache.md` | Agent needs caching, rate limiting, ephemeral state |
 | Message queue | `references/message-queue.md` | Agent needs webhooks / delayed tasks |
 | Postgres database | `references/database.md` | Agent needs structured storage / state across runs |
 | Deployment | `references/deploy.md` | Always needed (final step) |
