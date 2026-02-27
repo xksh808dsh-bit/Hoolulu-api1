@@ -211,10 +211,6 @@ const exec = await detail.json();
 | Every day at 9am UTC | `0 9 * * *` |
 | Every Monday at 9am UTC | `0 9 * * 1` |
 
-## Pricing
-
-~$0.001 per gateway request (job create, list, execute). Compute billed per-second based on memory tier.
-
 ## Response Shape
 
 All job endpoints return:

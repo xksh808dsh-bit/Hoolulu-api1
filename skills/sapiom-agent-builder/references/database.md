@@ -72,31 +72,9 @@ await safeFetch("https://neon.services.sapiom.ai/v1/databases/my-agent-db", {
 
 Irreversible. Accepts ID or handle.
 
-## Price Estimate (No Auth Required)
+## Available Durations
 
-```js
-const res = await fetch("https://neon.services.sapiom.ai/v1/databases/price", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({ duration: "24h" }),
-});
-const pricing = await res.json();
-// { price: "$0.010000", currency: "USD", duration: "24h", computeSize: "0.25 CU", expiresIn: "86400 seconds" }
-```
-
-Note: This endpoint is public — use plain `fetch`, not `safeFetch`.
-
-## Duration & Pricing
-
-| Duration | Price |
-|----------|-------|
-| 15m | $0.000001 |
-| 1h | $0.000001 |
-| 4h | $0.001 |
-| 24h | $0.01 |
-| 7d | $0.05 |
-
-Management calls (list, get, delete) cost $0.001 each.
+`"15m"` | `"1h"` | `"4h"` | `"24h"` | `"7d"`
 
 ## Using the Connection URI
 

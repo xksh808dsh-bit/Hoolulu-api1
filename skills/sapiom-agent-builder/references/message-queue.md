@@ -16,7 +16,7 @@ const QSTASH = "https://upstash.services.sapiom.ai";
 
 ## Publish a Message
 
-Fire-and-forget delivery to an HTTP endpoint. Price: $0.00001.
+Fire-and-forget delivery to an HTTP endpoint.
 
 ```js
 const res = await safeFetch(`${QSTASH}/v1/qstash/publish/https://my-webhook.example.com/handler`, {
@@ -35,7 +35,7 @@ console.log(`Message ID: ${data.messageId}`);
 
 ## Enqueue to a Named Queue
 
-Ordered delivery through a named queue. The queue is created automatically on first use. Price: $0.00001.
+Ordered delivery through a named queue. The queue is created automatically on first use.
 
 ```js
 const res = await safeFetch(`${QSTASH}/v1/qstash/enqueue/my-queue/https://my-webhook.example.com/handler`, {
@@ -47,7 +47,7 @@ const res = await safeFetch(`${QSTASH}/v1/qstash/enqueue/my-queue/https://my-web
 
 ## Batch Publish
 
-Publish multiple messages in one request. Price: $0.00001 × message count.
+Publish multiple messages in one request.
 
 ```js
 const res = await safeFetch(`${QSTASH}/v1/qstash/batch`, {
@@ -70,7 +70,7 @@ const res = await safeFetch(`${QSTASH}/v1/qstash/batch`, {
 
 ## Schedules
 
-Create recurring deliveries with a cron expression. Price: $0.00001 to create, $0.001 for management ops.
+Create recurring deliveries with a cron expression.
 
 ```js
 // Create a schedule — Upstash-Cron header is required
@@ -102,7 +102,7 @@ await safeFetch(`${QSTASH}/v1/qstash/schedules/${scheduleId}`, { method: "DELETE
 
 ## Queue Management
 
-Queues are created lazily when a message is first enqueued. Price: $0.001 per management op.
+Queues are created lazily when a message is first enqueued.
 
 ```js
 // List queues
@@ -122,7 +122,7 @@ await safeFetch(`${QSTASH}/v1/qstash/queues/my-queue`, { method: "DELETE" });
 
 ## Message Management
 
-Look up or cancel an in-flight message by its ID. Price: $0.001.
+Look up or cancel an in-flight message by its ID.
 
 ```js
 // Get message status
@@ -132,13 +132,6 @@ const msg = await safeFetch(`${QSTASH}/v1/qstash/messages/${messageId}`);
 await safeFetch(`${QSTASH}/v1/qstash/messages/${messageId}`, { method: "DELETE" });
 ```
 
-## Pricing Summary
-
-| Operation | Price |
-|-----------|-------|
-| Publish / enqueue / batch (per message) | $0.00001 |
-| Schedule create | $0.00001 |
-| Schedule / queue / message management | $0.001 |
 
 ## Gotchas
 

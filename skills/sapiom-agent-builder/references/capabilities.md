@@ -4,17 +4,17 @@ Available services your agent can use through Sapiom gateways. All requests use 
 
 ## Service Overview
 
-| Service | Gateway URL | What It Does | Cost/Request | Best For |
-|---------|------------|--------------|--------------|----------|
-| **OpenRouter** | `https://openrouter.services.sapiom.ai` | LLM inference (GPT-4o, Claude, Llama, etc.) | Varies by model | Reasoning, summarization, classification |
-| **Firecrawl** | `https://firecrawl.services.sapiom.ai` | Web scraping (clean markdown) | ~$0.009 | Extracting page content |
-| **Linkup** | `https://linkup.services.sapiom.ai` | Web search | ~$0.02 | Finding URLs, real-time info |
-| **Upstash Vector** | `https://upstash.services.sapiom.ai` (mgmt) + `https://{id}.vector.data.sapiom.ai` (instance) | Vector database (embeddings) | ~$0.000004 | Semantic search, RAG |
-| **Upstash Search** | `https://upstash.services.sapiom.ai` (mgmt) + `https://{id}.search.data.sapiom.ai` (instance) | Full-text search | ~$0.00005 | Keyword search, document indexing |
-| **Upstash Redis** | `https://upstash.services.sapiom.ai` (mgmt) + `https://{id}.redis.data.sapiom.ai` (instance) | Redis key-value store | ~$0.000002/cmd | Caching, rate limiting, ephemeral state |
-| **QStash** | `https://upstash.services.sapiom.ai` | Message queue / scheduling | ~$0.00001 | Delayed tasks, webhooks |
-| **Neon Postgres** | `https://neon.services.sapiom.ai` | On-demand PostgreSQL databases | ~$0.01 (24h) | Structured data, state across runs |
-| **Deploy + Compute** | `https://blaxel.services.sapiom.ai` | Scheduled jobs, batch execution, sandboxes | ~$0.001 | Running your agent code |
+| Service | Gateway URL | What It Does | Best For |
+|---------|------------|--------------|----------|
+| **OpenRouter** | `https://openrouter.services.sapiom.ai` | LLM inference (GPT-4o, Claude, Llama, etc.) | Reasoning, summarization, classification |
+| **Firecrawl** | `https://firecrawl.services.sapiom.ai` | Web scraping (clean markdown) | Extracting page content |
+| **Linkup** | `https://linkup.services.sapiom.ai` | Web search | Finding URLs, real-time info |
+| **Upstash Vector** | `https://upstash.services.sapiom.ai` (mgmt) + `https://{id}.vector.data.sapiom.ai` (instance) | Vector database (embeddings) | Semantic search, RAG |
+| **Upstash Search** | `https://upstash.services.sapiom.ai` (mgmt) + `https://{id}.search.data.sapiom.ai` (instance) | Full-text search | Keyword search, document indexing |
+| **Upstash Redis** | `https://upstash.services.sapiom.ai` (mgmt) + `https://{id}.redis.data.sapiom.ai` (instance) | Redis key-value store | Caching, rate limiting, ephemeral state |
+| **QStash** | `https://upstash.services.sapiom.ai` | Message queue / scheduling | Delayed tasks, webhooks |
+| **Neon Postgres** | `https://neon.services.sapiom.ai` | On-demand PostgreSQL databases | Structured data, state across runs |
+| **Deploy + Compute** | `https://blaxel.services.sapiom.ai` | Scheduled jobs, batch execution, sandboxes | Running your agent code |
 
 ## Common Patterns
 

@@ -53,7 +53,7 @@ const VECTOR = `https://${index.id}.vector.data.sapiom.ai`;
 
 ## Step 2: Upsert Vectors
 
-Each upsert call takes an array. Price: $0.000004 per vector.
+Each upsert call takes an array.
 
 ```js
 // Using pre-computed embeddings
@@ -143,11 +143,6 @@ await safeFetch(`${VECTOR}/range/default`, {
 await safeFetch(`${MGMT}/v1/vector/indexes/${index.id}`, { method: "DELETE" });
 ```
 
-## Pricing
-
-- Management calls (create, delete index): ~$0.000010 each
-- Upsert: $0.000004 per vector (batch billing — 2 vectors = $0.000008)
-- Query/fetch/delete/range/update: $0.000004 per request
 
 ## Gotchas
 

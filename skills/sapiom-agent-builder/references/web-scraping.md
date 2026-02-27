@@ -66,10 +66,6 @@ const extracted = (await res.json()).data.extract;
 | `waitFor` | — | Wait ms for JS to render |
 | `timeout` | 30000 | Request timeout ms |
 
-## Pricing
-
-~$0.009 per page. Structured extraction adds token cost.
-
 ## Gotchas
 
 - **`formats` is an array** — `["markdown"]` not `"markdown"`
