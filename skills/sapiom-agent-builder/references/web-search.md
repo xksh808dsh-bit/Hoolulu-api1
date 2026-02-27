@@ -55,10 +55,6 @@ body: JSON.stringify({
 | `depth` | `"standard"`, `"deep"` | Deep searches more sources, costs more |
 | `outputType` | `"searchResults"`, `"sourcedAnswer"` | Raw results vs. synthesized answer |
 
-## Pricing
-
-~$0.02 per search request.
-
 ## Gotchas
 
 - **POST, not GET** — search is a POST request with JSON body

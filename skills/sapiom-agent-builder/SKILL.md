@@ -200,7 +200,7 @@ After deploy completes:
 
 ### LLM returns garbage or hallucinated data
 **Cause:** Input content too long, prompt too vague, or wrong model.
-**Fix:** Truncate input (`.slice(0, 8000)`), be more specific in the system prompt, or switch to a more capable model (e.g., `gpt-4o` instead of `gpt-4o-mini`).
+**Fix:** Truncate input (`.slice(0, 8000)`), be more specific in the system prompt, or switch to a more capable model (e.g., `anthropic/claude-opus-4.6`).
 
 ### Deploy returns 502
 **Cause:** Bad `package.json` — missing `main`, `scripts.start`, or invalid JSON.

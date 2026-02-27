@@ -40,7 +40,7 @@ const SEARCH = `https://${index.id}.search.data.sapiom.ai`;
 
 ## Step 2: Upsert Documents
 
-Index name (`articles`, `products`, etc.) is part of the path. Price: $0.000050 per request (not per document).
+Index name (`articles`, `products`, etc.) is part of the path.
 
 ```js
 await safeFetch(`${SEARCH}/upsert/articles`, {
@@ -64,7 +64,7 @@ await safeFetch(`${SEARCH}/upsert/articles`, {
 ## Step 3: Search Documents
 
 ```js
-// Basic search — $0.000050
+// Basic search
 const res = await safeFetch(`${SEARCH}/search/articles`, {
   method: "POST",
   headers: { "Content-Type": "application/json" },
@@ -76,7 +76,7 @@ const data = await res.json();
 ```
 
 ```js
-// With reranking — $0.001050 (base + $0.001000 surcharge)
+// With reranking
 const res = await safeFetch(`${SEARCH}/search/articles`, {
   method: "POST",
   headers: { "Content-Type": "application/json" },
@@ -84,7 +84,7 @@ const res = await safeFetch(`${SEARCH}/search/articles`, {
 });
 ```
 
-Reranking uses AI to re-score results for higher relevance. Worth the cost for user-facing search.
+Reranking uses AI to re-score results for higher relevance. Worth enabling for user-facing search.
 
 ## Other Data Plane Operations
 
@@ -116,14 +116,6 @@ await safeFetch(`${SEARCH}/range/articles`, {
 ```js
 await safeFetch(`${MGMT}/v1/search/indexes/${index.id}`, { method: "DELETE" });
 ```
-
-## Pricing
-
-- Management calls (create, delete index): ~$0.000010 each
-- Upsert: $0.000050 per request (regardless of document count)
-- Search without reranking: $0.000050
-- Search with `reranking: true`: $0.001050
-- Fetch/delete/range: $0.000050 per request
 
 ## Gotchas
 

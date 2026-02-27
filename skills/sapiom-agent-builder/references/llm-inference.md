@@ -1,6 +1,6 @@
 # LLM Inference — OpenRouter
 
-Call any LLM (GPT-4o, Claude, Llama, Gemini, etc.) via OpenRouter through Sapiom.
+Call any LLM (Claude, GPT, Gemini, DeepSeek, Llama, etc.) via OpenRouter through Sapiom.
 
 **Gateway:** `https://openrouter.services.sapiom.ai`
 **API:** OpenAI-compatible (`/v1/chat/completions`)
@@ -23,7 +23,7 @@ const res = await safeFetch(`${OPENROUTER}/chat/completions`, {
   method: "POST",
   headers: { "Content-Type": "application/json" },
   body: JSON.stringify({
-    model: "openai/gpt-4o-mini",
+    model: "anthropic/claude-sonnet-4.6",
     messages: [
       { role: "system", content: "You are a helpful assistant." },
       { role: "user", content: "Summarize this article: ..." },
@@ -39,21 +39,21 @@ const reply = data.choices[0].message.content;
 
 ## Recommended Models
 
-| Model | Cost (per 1M tokens) | Best For |
-|-------|---------------------|----------|
-| `openai/gpt-4o-mini` | $0.15 in / $0.60 out | Default — fast, cheap, capable |
-| `openai/gpt-4o` | $5.00 in / $15.00 out | Complex reasoning |
-| `google/gemini-2.0-flash-001` | $0.075 in / $0.30 out | Cheapest capable model |
-| `anthropic/claude-3.5-sonnet` | $3.00 in / $15.00 out | Best writing quality |
-| `meta-llama/llama-3.1-70b-instruct` | $0.88 in / $0.88 out | Open-weights, good balance |
+| Model | Best For |
+|-------|----------|
+| `anthropic/claude-sonnet-4.6` | Default — best all-round for agent tasks, 1M context |
+| `openai/gpt-4.1-mini` | Budget — fast, 1M context, good tool use |
+| `google/gemini-2.0-flash-001` | Budget — fast, 1M context |
+| `deepseek/deepseek-v3.2` | Budget — strong reasoning at low cost |
+| `anthropic/claude-opus-4.6` | Premium — most capable, complex reasoning |
 
-**Default recommendation:** `openai/gpt-4o-mini` — best cost/quality for most agent tasks.
+**Default recommendation:** `anthropic/claude-sonnet-4.6` — best capability/cost ratio for most agent tasks.
 
 ## JSON Mode
 
 ```js
 body: JSON.stringify({
-  model: "openai/gpt-4o-mini",
+  model: "anthropic/claude-sonnet-4.6",
   messages: [
     { role: "system", content: "Respond with JSON only. Schema: { summary: string, sentiment: 'positive'|'negative'|'neutral' }" },
     { role: "user", content: articleText },
@@ -61,10 +61,6 @@ body: JSON.stringify({
   response_format: { type: "json_object" },
 })
 ```
-
-## Pricing
-
-Varies by model. Response includes `usage.cost` with exact USD. Budget ~$0.001-0.01 per call for `gpt-4o-mini` with typical prompts.
 
 ## Gotchas
 

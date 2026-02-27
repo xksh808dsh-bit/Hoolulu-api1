@@ -38,13 +38,13 @@ const sandbox = await res.json();
 
 ## Tiers
 
-| Tier | Memory | $/second |
-|------|--------|----------|
-| xs | 2 GB | $0.000023 |
-| s | 4 GB | $0.000046 |
-| m | 8 GB | $0.000092 |
-| l | 16 GB | $0.000184 |
-| xl | 32 GB | $0.000368 |
+| Tier | Memory |
+|------|--------|
+| xs | 2 GB |
+| s | 4 GB |
+| m | 8 GB |
+| l | 16 GB |
+| xl | 32 GB |
 
 ## TTL (Time to Live)
 

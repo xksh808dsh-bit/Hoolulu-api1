@@ -40,7 +40,7 @@ const REDIS = `https://${db.id}.redis.data.sapiom.ai`;
 
 ## Step 2: Use Redis Commands
 
-Upstash Redis exposes a REST API that mirrors Redis commands. Price: $0.000002 per command.
+Upstash Redis exposes a REST API that mirrors Redis commands.
 
 ### GET / SET
 
@@ -60,7 +60,7 @@ await safeFetch(`${REDIS}/set/my-key/my-value`, { method: "POST" });
 await safeFetch(`${REDIS}/del/my-key`, { method: "POST" });
 ```
 
-### Pipeline (multiple commands — 1 request, N×$0.000002)
+### Pipeline (multiple commands in 1 request)
 
 ```js
 const res = await safeFetch(`${REDIS}/pipeline`, {
@@ -107,12 +107,6 @@ await safeFetch(`${REDIS}/`, {
 await safeFetch(`${MGMT}/v1/redis/databases/${db.id}`, { method: "DELETE" });
 ```
 
-## Pricing
-
-- Management calls (create, delete database): ~$0.000010 each
-- Single command (GET, SET, DEL, etc.): $0.000002
-- Pipeline: $0.000002 × number of commands (e.g., 5 commands = $0.000010)
-
 ## Use Cases
 
 - **Rate limiting** — `INCR` + `EXPIRE` on a key per user/IP
@@ -123,6 +117,6 @@ await safeFetch(`${MGMT}/v1/redis/databases/${db.id}`, { method: "DELETE" });
 ## Gotchas
 
 - **Prefer Postgres for durable state** — Redis data can be lost if the database is deleted or expires; use Neon Postgres for anything you can't afford to lose
-- **Use pipeline for bulk ops** — a pipeline with N commands costs N×$0.000002 but requires only 1 HTTP round-trip
+- **Use pipeline for bulk ops** — a pipeline with N commands requires only 1 HTTP round-trip
 - **Resource ID is stable** — store `db.id` if you need to reconnect to the same database later
 - **TTL on keys** — add `EX {seconds}` to SET commands for automatic expiration; avoids unbounded key growth
