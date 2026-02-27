@@ -1,9 +1,14 @@
 ---
-name: agent-builder
-description: Build and deploy autonomous agents — scripts that run on a schedule, call LLMs, scrape the web, store data, and act without user intervention. Use when user says "build me an agent", "create a bot", "automate X on a schedule", or wants to deploy code that runs autonomously via Sapiom.
+name: sapiom-agent-builder
+description: Build and deploy autonomous agents — scripts that run on a schedule,
+  call LLMs, scrape the web, store data, and act without user intervention. Use when
+  user says "build me an agent", "create a bot", "automate X on a schedule",
+  "monitor this page", "summarize X every day", "alert me when Y changes",
+  or wants to deploy code that runs autonomously via Sapiom.
+  Do NOT use for one-off API calls or deploying existing scripts — use sapiom-deploy instead.
 ---
 
-# Agent Builder
+# Sapiom Agent Builder
 
 Build and deploy autonomous agents powered by `@sapiom/fetch` SDK and Sapiom service gateways.
 
@@ -12,7 +17,10 @@ Build and deploy autonomous agents powered by `@sapiom/fetch` SDK and Sapiom ser
 - User says "build me an agent that..."
 - User wants to "automate X on a schedule"
 - User wants a "bot that checks/monitors/scrapes/summarizes"
+- User wants to "alert me when X changes"
 - User wants to deploy code that runs autonomously
+
+> Already have a working script and just want to deploy it? Use the **sapiom-deploy** skill instead.
 
 ## Process
 
@@ -140,6 +148,12 @@ Repeat until the output holds up to inspection. Only then proceed to deploy.
 
 ### Phase 7: Deploy
 
+> **STOP — Before deploying, verify:**
+> 1. Phase 5 (Sample Run) completed — the script runs without errors locally
+> 2. Phase 6 (Quality Check) passed — the output data is correct and makes sense
+>
+> If either is incomplete, go back. Deploying a broken agent wastes time — it will fail the same way in the cloud.
+
 Read `references/deploy.md` for the full API reference. Deploy is synchronous — no polling needed.
 
 **Quick summary:**
@@ -168,6 +182,32 @@ After deploy completes:
 1. Confirm job status is `deployed` in the response
 2. Report to user: job name, cron schedule, services used
 3. Remind user to set `SAPIOM_API_KEY` env var if needed
+
+## Troubleshooting
+
+### `safeFetch` is not a function
+**Cause:** Wrong import or missing `@sapiom/fetch` dependency.
+**Fix:** Ensure `package.json` has `"@sapiom/fetch": "^0.3.0"` and code uses `const { createFetch } = require("@sapiom/fetch")`.
+
+### HTTP 402 Payment Required
+**Cause:** Missing or invalid `SAPIOM_API_KEY`.
+**Fix:** Check that the env var is set and the key is valid. If running locally: `SAPIOM_API_KEY=sk-... node index.js`. If deployed: pass via `envs` in the deploy body.
+
+### Scrape returns empty/wrong content
+**Cause:** Firecrawl got blocked, or the page requires JavaScript rendering.
+**Fix:** Try adding `waitFor: 3000` to the scrape options. Some sites block automated requests — test the URL manually first.
+
+### LLM returns garbage or hallucinated data
+**Cause:** Input content too long, prompt too vague, or wrong model.
+**Fix:** Truncate input (`.slice(0, 8000)`), be more specific in the system prompt, or switch to a more capable model (e.g., `gpt-4o` instead of `gpt-4o-mini`).
+
+### Deploy returns 502
+**Cause:** Bad `package.json` — missing `main`, `scripts.start`, or invalid JSON.
+**Fix:** Ensure `package.json` has `"main": "index.js"` and `"scripts": { "start": "node index.js" }`.
+
+### Agent runs but produces no output
+**Cause:** Env vars missing in deployed environment.
+**Fix:** Pass `SAPIOM_API_KEY` via the `envs` field when deploying. The job needs it at runtime to call other gateways.
 
 ## Checklist
 
