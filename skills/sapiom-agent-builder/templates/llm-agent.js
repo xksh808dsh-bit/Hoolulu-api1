@@ -45,7 +45,7 @@ async function analyzeWithLLM(content, prompt) {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      model: "openai/gpt-4o-mini",
+      model: "anthropic/claude-sonnet-4.6",
       messages: [
         { role: "system", content: prompt },
         { role: "user", content },
