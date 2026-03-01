@@ -56,7 +56,7 @@ User says: "Deploy this script to run every 2 hours"
 3. `POST /v1/jobs?name=my-job&schedule=0 */2 * * *` with ZIP body
 4. Response returns `{ status: "deployed" }` — deploy is synchronous, no polling
 
-**Result:** Job runs every 2 hours. Check status with `GET /v1/jobs/my-job`.
+**Result:** Deploy returns immediately with `status: "building"`. Poll `GET /v1/jobs/my-job` every 10–15s until `"deployed"` (~60–120s). Then the job runs every 2 hours.
 
 ## Example: Fan Out to Parallel Workers
 

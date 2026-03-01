@@ -155,10 +155,10 @@ Repeat until the output holds up to inspection. Only then proceed to deploy.
 >
 > If either is incomplete, go back. Deploying a broken agent wastes time — it will fail the same way in the cloud.
 
-Read `references/deploy.md` for the full API reference. Deploy is synchronous — no polling needed.
+Read `references/deploy.md` for the full API reference. Deploy is non-blocking — it returns immediately with `status: "building"`. Poll `GET /v1/jobs/{name}` every 10–15 seconds until `"deployed"` or `"failed"` (typically 60–120s).
 
 **Quick summary:**
-- **Scheduled job** (most common): ZIP + `POST /v1/jobs?name={name}&schedule={cron}`
+- **Scheduled job** (most common): ZIP + `POST /v1/jobs?name={name}&schedule={cron}` → poll until deployed
 - **Batch job**: same deploy, omit `schedule`, trigger via `POST /v1/jobs/{name}/executions`
 - **Orchestrator + workers**: scheduled job triggers batch job executions
 
