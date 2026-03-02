@@ -68,13 +68,21 @@ const job = await res.json();
 console.log(`Job deployed: ${job.name} (status: ${job.status})`);
 ```
 
-The deploy endpoint is synchronous — it returns `201 Created` once the job is fully deployed. No polling needed. The gateway handles ZIP extraction, build, and deployment internally.
+The deploy endpoint returns immediately with `status: "building"`. The build continues in the background (typically 60–120 seconds). Poll `GET /v1/jobs/{name}` until `status` is `"deployed"` or `"failed"`.
 
-### 3. Verify
+### 3. Poll Until Deployed
 
 ```js
-// job.status will be 'deployed' on success
-// If deploy fails, the endpoint returns a 502 with error details
+// Poll every 10–15 seconds until status transitions
+let status = 'building';
+while (status === 'building' || status === 'provisioning') {
+  await new Promise(r => setTimeout(r, 12_000));
+  const poll = await safeFetch(`${GATEWAY}/v1/jobs/${jobName}`);
+  const data = await poll.json();
+  status = data.status;
+  console.log(`Job status: ${status}`);
+}
+// status is now 'deployed' (success) or 'failed' (error)
 ```
 
 ## Alternative: JSON Files Map
@@ -230,7 +238,7 @@ All job endpoints return:
 
 ## Gotchas
 
-- **Deploy is synchronous** — the POST returns once the job is fully deployed (or errors). No polling needed.
+- **Deploy is non-blocking** — the POST returns immediately with `status: "building"`. Poll `GET /v1/jobs/{name}` every 10–15s until `"deployed"` or `"failed"` (typically 60–120s).
 - **Job names are account-scoped** — the gateway handles namespace isolation
 - **Builder needs `package.json`** — without it, the runtime can't detect Node.js
 - **`npm install` runs automatically** — the builder installs dependencies from `package.json`
