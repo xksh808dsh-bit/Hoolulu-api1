@@ -19,7 +19,7 @@ description: Access 97 cloud-service tools via Sapiom MCP server — scrape webs
 
 ```bash
 # Claude Code CLI
-claude mcp add sapiom --transport http https://api.sapiom.ai/v1/mcp --header "Authorization:Bearer YOUR_API_KEY"
+claude mcp add sapiom --transport http https://api.sapiom.ai/v1/mcp
 ```
 
 ```json
@@ -27,14 +27,13 @@ claude mcp add sapiom --transport http https://api.sapiom.ai/v1/mcp --header "Au
   "mcpServers": {
     "sapiom": {
       "type": "http",
-      "url": "https://api.sapiom.ai/v1/mcp",
-      "headers": { "Authorization": "Bearer YOUR_API_KEY" }
+      "url": "https://api.sapiom.ai/v1/mcp"
     }
   }
 }
 ```
 
-Get your API key at https://app.sapiom.ai/settings — once connected, all 97 tools are available immediately.
+Browser auth is used automatically. To use an API key instead, add `--header "Authorization:Bearer YOUR_KEY"` or set the `headers` field. Get a key at https://app.sapiom.ai/settings.
 
 ## When to Use
 
@@ -254,7 +253,7 @@ Python/curl: use standard HTTP with `X-402-Payment` header — see reference fil
 | Issue | Cause | Fix |
 |-------|-------|-----|
 | 402 Payment Required | Insufficient balance or spending rule hit | Top up at app.sapiom.ai or check `sapiom_list_spending_rules` |
-| MCP connection refused | Wrong URL or missing auth header | Verify URL is `https://api.sapiom.ai/v1/mcp` with `Bearer` token |
+| MCP connection refused | Wrong URL or auth issue | Verify URL is `https://api.sapiom.ai/v1/mcp`; try browser auth or check API key |
 | `tool_discover` returns nothing | Too vague query | Use specific keywords: "scrape", "redis", "image", "search" |
 | Scrape returns empty | JS-rendered page needs wait time | Use `sapiom_scrape` with `waitFor: 3000` instead of `sapiom_fetch` |
 | "Resource not found" | Using data tool before provisioning | Create first: `sapiom_redis_create`, `sapiom_vector_create`, etc. |
